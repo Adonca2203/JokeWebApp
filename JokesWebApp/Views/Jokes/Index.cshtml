@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<JokesWebApp.Models.Joke>
+
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Index";
+    var usr = await UserManager.GetUserAsync(User);
+    var email = usr?.Email;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.JokeQuestion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.JokeQuestion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserEmail)
+            </td>
+            <td>
+                @if (User.Identity.IsAuthenticated && email == item.UserEmail) {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                }
+                | <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) {
+                <a asp-action="Delete" asp-route-id="@item.Id"> Delete </a >
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
