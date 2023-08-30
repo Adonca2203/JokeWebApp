@@ -1,0 +1,47 @@
+﻿@model JokesWebApp.Models.Joke
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Create";
+    var usr = await UserManager.GetUserAsync(User);
+    var email = usr?.Email;
+}
+
+<h1>Create</h1>
+
+<h4>Joke</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="JokeQuestion" class="control-label">Joke Question</label>
+                <input asp-for="JokeQuestion" class="form-control" />
+                <span asp-validation-for="JokeQuestion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JokeAnswer" class="control-label">Joke Answer</label>
+                <input asp-for="JokeAnswer" class="form-control" />
+                <span asp-validation-for="JokeAnswer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserEmail" class="control-label">Creator Email</label>
+                <input readonly asp-for="UserEmail" class="form-control" value=@email />
+                <span asp-validation-for="UserEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
